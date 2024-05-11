@@ -1,0 +1,44 @@
+extends CharacterBody2D
+
+enum state  {
+	PARADO,
+	ANDANDO
+}
+
+@onready var textura_anim = $Textura/Anim
+@onready var textura = $Textura
+
+var estado = null
+
+var velocidade  = 200
+
+func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+
+func movimento():
+	var direcao = Input.get_vector('esquerda', 'direita', 'cima', 'baixo').normalized()
+	if direcao:
+		estado = state.ANDANDO
+		velocity = direcao * velocidade
+	else:
+		estado = state.PARADO
+		velocity = Vector2()
+
+func anim_control():
+	if estado == state.PARADO:
+		anim('Idle')
+	elif estado == state.ANDANDO:
+		anim('Walk')
+		
+	#flip#
+	if velocity.x  > 0:
+		textura.flip_h = false
+	elif velocity.x < 0:
+		textura.flip_h = true
+func _process(delta):
+	movimento()
+	anim_control()
+	move_and_slide()
+
+func anim(Anim):
+	textura_anim.play(Anim)
