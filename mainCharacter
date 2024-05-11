@@ -1,31 +1,47 @@
 extends CharacterBody2D
 
-enum state  {
-	PARADO,          
+#este enumerador e a base do uso de StateMachine nesse codigo#
+#armazenando os possiveis estados do objeto dentro dele e logo#
+#em seguida armazena o estado atual na variavel "estado", sendo#
+#a referencia principal  desse sistema#
+
+enum state  { #raiz dos estados#
+	PARADO,
 	ANDANDO
 }
-var estado = null
+var estado = null #referencia principal(armazena o estado atual do objeto)#
 
 @onready var textura_anim = $Textura/Anim
 @onready var textura = $Textura
 
+#status publicos do objeto#
 @export var velocidade  = 200
+
+#na funcao update abaixo o foco e chamar algumas funcoes#
+#que usamos, e precisam ser atualizadas  a todo momento.#
 
 func _process(_delta):
 	movimento()
 	anim_control()
 	move_and_slide()
 
+#a movimentacao e bastante simples, captura o Input de direcao e#
+#aplica a velocidade com um peso ao objeto, usando o metodo "lerp"#
+
 func movimento():
 	var direcao = Input.get_vector('esquerda', 'direita', 'cima', 'baixo').normalized()
-	var aplicar_velocidade = lerp(Vector2(), direcao*velocidade, 0.1)
+	var aplicar_forca = direcao * velocidade
+	var peso = 0.1
+	
+	var interpolacao = lerp(Vector2(), aplicar_forca, peso)
 
 	if direcao:
 		estado = state.ANDANDO
-		velocity = aplicar_velocidade
+		velocity = interpolacao
 	else:
 		estado = state.PARADO
 		velocity = Vector2()
+
 
 func anim_control():
 	match estado:
