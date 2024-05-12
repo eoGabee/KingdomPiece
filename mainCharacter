@@ -3,13 +3,13 @@ extends CharacterBody2D
 #este enumerador e a base do uso de StateMachine nesse codigo#
 #armazenando os possiveis estados do objeto dentro dele e logo#
 #em seguida armazena o estado atual na variavel "estado", sendo#
-#a referencia principal  desse sistema#
+#a referencia principal  desse sistema
 
-enum state  { #raiz dos estados#
+enum state  { #raiz dos estados
 	PARADO,
 	ANDANDO
 }
-var estado = null #referencia principal(armazena o estado atual do objeto)#
+var estado = null #referencia principal(armazena o estado atual do objeto)
 
 @onready var textura_anim = $Textura/Anim
 @onready var textura = $Textura
